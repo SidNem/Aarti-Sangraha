@@ -32,7 +32,6 @@ function InputForm() {
   const [showEndDate, setShowEndDate] = useState(false);
   const [selectedImageUri, setSelectedImageUri] = useState(null);
 
-
   const onChangeStartDate = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
     setShowStartDate(false);
@@ -56,24 +55,21 @@ function InputForm() {
   pickDocument = async () => {
     try {
       let result = await DocumentPicker.getDocumentAsync({ type: "image/*" });
-      if(result.canceled == "false"){
+      //console.log(result.canceled);
+      if (!result.canceled ) {
         setSelectedImageUri(result.assets[0].uri);
+      } else {
+        console.log("Didn't select the document");
       }
-      else{
-        console.log("")
-      }
-      
-     
     } catch (error) {
       console.log("Error in uploading document:", error);
     }
   };
-  
 
   const formatDate = (date) => {
     const day = date.getDate();
-    const month = date.getMonth() + 1; 
-    const year = date.getFullYear() % 100; 
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear() % 100;
     return `${day}/${month}/${year}`;
   };
 
@@ -145,20 +141,18 @@ function InputForm() {
       <View style={styles.inputContainer}>
         <View>
           <Text style={styles.label}>Select Event Poster</Text>
-          <TouchableOpacity
-            style={styles.calender}
-            onPress={pickDocument}
-          >
+          <TouchableOpacity style={styles.calender} onPress={pickDocument}>
             <Text style={styles.buttonText}>Add a file</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {selectedImageUri && (
-      <Image source={{ uri: selectedImageUri }} style={{ width: 200, height: 200 }} />
-    )}
-   
-
+        <Image
+          source={{ uri: selectedImageUri }}
+          style={{ width: 200, height: 200 }}
+        />
+      )}
     </SafeAreaView>
   );
 }
