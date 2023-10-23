@@ -7,10 +7,11 @@ import {
   Button,
   SafeAreaView,
   StyleSheet,
-
+  Image,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { FontAwesome } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
 
 const COLORS = {
   white: "#fff",
@@ -25,12 +26,12 @@ function InputForm() {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
 
-
-
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [showStartDate, setShowStartDate] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
+  const [selectedImageUri, setSelectedImageUri] = useState(null);
+
 
   const onChangeStartDate = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
@@ -52,33 +53,29 @@ function InputForm() {
     setShowEndDate(true);
   };
 
+  pickDocument = async () => {
+    try {
+      let result = await DocumentPicker.getDocumentAsync({ type: "image/*" });
+      if(result.canceled == "false"){
+        setSelectedImageUri(result.assets[0].uri);
+      }
+      else{
+        console.log("")
+      }
+      
+     
+    } catch (error) {
+      console.log("Error in uploading document:", error);
+    }
+  };
+  
+
   const formatDate = (date) => {
     const day = date.getDate();
-    const month = date.getMonth() + 1; // Month is zero-based
-    const year = date.getFullYear() % 100; // Get the last two digits of the year
+    const month = date.getMonth() + 1; 
+    const year = date.getFullYear() % 100; 
     return `${day}/${month}/${year}`;
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,19 +99,20 @@ function InputForm() {
         />
       </View>
 
-     
-
       <View style={styles.dateContainer}>
         <View>
           <Text style={styles.label}>Select Start Date</Text>
-          <TouchableOpacity style={styles.calender} onPress={showStartDatePicker}>
+          <TouchableOpacity
+            style={styles.calender}
+            onPress={showStartDatePicker}
+          >
             <FontAwesome name="calendar" size={24} color="black" />
 
             <Text style={styles.buttonText}>{formatDate(startDate)}</Text>
           </TouchableOpacity>
         </View>
 
-        <View styles={{marginLeft:20,}}>
+        <View styles={{ marginLeft: 20 }}>
           <Text style={styles.label}>Select End Date</Text>
           <TouchableOpacity style={styles.calender} onPress={showEndDatePicker}>
             <FontAwesome name="calendar" size={24} color="black" />
@@ -144,29 +142,22 @@ function InputForm() {
         />
       )}
 
-    
+      <View style={styles.inputContainer}>
+        <View>
+          <Text style={styles.label}>Select Event Poster</Text>
+          <TouchableOpacity
+            style={styles.calender}
+            onPress={pickDocument}
+          >
+            <Text style={styles.buttonText}>Add a file</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      {selectedImageUri && (
+      <Image source={{ uri: selectedImageUri }} style={{ width: 200, height: 200 }} />
+    )}
+   
 
     </SafeAreaView>
   );
@@ -182,7 +173,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     color: COLORS.grey,
-    marginBottom:5,
+    marginBottom: 5,
   },
   input: {
     height: 40,
@@ -208,8 +199,7 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     flexDirection: "row",
-    justifyContent:'space-between'
-
+    justifyContent: "space-between",
   },
 });
 
