@@ -6,7 +6,7 @@ export const sampleEventData = [
       start_date: "2023-10-15",
       end_date: "2023-10-16",
       skills_required: ["Skill1", "Skill2"],
-      event_poster: "1.png",
+      event_poster: "https://picsum.photos/200/300",
       categories: ["Category1", "Category2"],
       description: "Description for Event 1",
       organizer: {
@@ -27,7 +27,7 @@ export const sampleEventData = [
       start_date: "2023-11-20",
       end_date: "2023-11-21",
       skills_required: ["Skill3", "Skill4"],
-      event_poster: "2.png",
+      event_poster: "https://picsum.photos/200/400",
       categories: ["Category2", "Category3"],
       description: "Description for Event 2",
       organizer: {
@@ -48,7 +48,7 @@ export const sampleEventData = [
       start_date: "2023-12-25",
       end_date: "2023-12-26",
       skills_required: ["Skill2", "Skill5"],
-      event_poster: "3.png",
+      event_poster: "https://picsum.photos/200/500",
       categories: ["Category1", "Category3"],
       description: "Description for Event 3",
       organizer: {
@@ -69,7 +69,7 @@ export const sampleEventData = [
       start_date: "2024-01-30",
       end_date: "2024-01-31",
       skills_required: ["Skill1", "Skill3"],
-      event_poster: "4.png",
+      event_poster: "https://picsum.photos/200/600",
       categories: ["Category2", "Category4"],
       description: "Description for Event 4",
       organizer: {
@@ -90,7 +90,7 @@ export const sampleEventData = [
       start_date: "2024-02-10",
       end_date: "2024-02-11",
       skills_required: ["Skill4", "Skill5"],
-      event_poster: "5.png",
+      event_poster: "https://picsum.photos/200/700",
       categories: ["Category3", "Category4"],
       description: "Description for Event 5",
       organizer: {
@@ -111,7 +111,7 @@ export const sampleEventData = [
       start_date: "2024-03-15",
       end_date: "2024-03-16",
       skills_required: ["Skill1", "Skill2"],
-      event_poster: "6.png",
+      event_poster: "https://picsum.photos/200/800",
       categories: ["Category1", "Category4"],
       description: "Description for Event 6",
       organizer: {
@@ -132,7 +132,7 @@ export const sampleEventData = [
       start_date: "2024-04-20",
       end_date: "2024-04-21",
       skills_required: ["Skill3", "Skill5"],
-      event_poster: "7.png",
+      event_poster: "https://picsum.photos/200/100",
       categories: ["Category2", "Category3"],
       description: "Description for Event 7",
       organizer: {
@@ -153,7 +153,7 @@ export const sampleEventData = [
       start_date: "2024-05-25",
       end_date: "2024-05-26",
       skills_required: ["Skill2", "Skill4"],
-      event_poster: "8.png",
+      event_poster: "https://picsum.photos/200/90",
       categories: ["Category1", "Category2"],
       description: "Description for Event 8",
       organizer: {
@@ -174,7 +174,7 @@ export const sampleEventData = [
       start_date: "2024-06-30",
       end_date: "2024-06-31",
       skills_required: ["Skill1", "Skill5"],
-      event_poster: "9.png",
+      event_poster: "https://picsum.photos/200/80",
       categories: ["Category3", "Category4"],
       description: "Description for Event 9",
       organizer: {
@@ -195,7 +195,7 @@ export const sampleEventData = [
       start_date: "2024-07-05",
       end_date: "2024-07-06",
       skills_required: ["Skill2", "Skill3"],
-      event_poster: "10.jpg",
+      event_poster: "https://picsum.photos/200/210",
       categories: ["Category1", "Category2"],
       description: "Description for Event 10",
       organizer: {

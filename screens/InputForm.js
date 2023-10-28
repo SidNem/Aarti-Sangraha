@@ -15,12 +15,15 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { FontAwesome } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { FontAwesome5 } from "react-native-vector-icons";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 
 import skillsArray from "./static data/skills";
 import interestsArray from "./static data/interest";
 import SkillCard from "./static data/SkillCard";
+import { AntDesign } from "@expo/vector-icons";
+import Awards from "./Awards";
 
 const COLORS = {
   white: "#fff",
@@ -31,7 +34,9 @@ const COLORS = {
   darkBlue: "#7978B5",
   red: "red",
 };
-function InputForm() {
+function InputForm({navigation}) {
+
+  const Stack = createNativeStackNavigator();
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
 
@@ -48,7 +53,7 @@ function InputForm() {
   const [selectedInterests, setSelectedInterests] = useState(new Set());
   const [content, setContent] = useState("");
 
-  const [imageName,setImageName] = useState("Add a File");
+  const [imageName, setImageName] = useState("Add a File");
 
   const onEditorChange = (html) => {
     setContent(html);
@@ -141,264 +146,273 @@ function InputForm() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-
-      <View style={styles.cardContainer}>
-      <View style={styles.inputContainer}>
-          <Text style={styles.label}>Name</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your name"
-            value={name}
-            onChangeText={setName}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Location</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your Location"
-            value={location}
-            onChangeText={setLocation}
-          />
-        </View>
-    </View>
-        
-    <View style={styles.cardContainer}>
-        <View style={styles.dateContainer}>
-          <View>
-            <Text style={styles.label}>Select Start Date</Text>
-            <TouchableOpacity
-              style={styles.calender}
-              onPress={showStartDatePicker}
-            >
-              <FontAwesome name="calendar" size={30} color="black" />
-
-              <Text style={styles.buttonText}>{formatDate(startDate)}</Text>
-            </TouchableOpacity>
+        <View style={styles.cardContainer}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Event Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Event Name"
+              value={name}
+              onChangeText={setName}
+            />
           </View>
 
-          <View styles={{ marginLeft: 20 }}>
-            <Text style={styles.label}>Select End Date</Text>
-            <TouchableOpacity
-              style={styles.calender}
-              onPress={showEndDatePicker}
-            >
-              <FontAwesome name="calendar" size={30} color="black" />
-
-              <Text style={styles.buttonText}>{formatDate(endDate)}</Text>
-            </TouchableOpacity>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Event Location</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Event Location"
+              value={location}
+              onChangeText={setLocation}
+            />
           </View>
         </View>
 
-       
-
-        {showStartDate && (
-          <DateTimePicker
-            testID="startDatePicker"
-            value={startDate}
-            mode="date"
-            display="default"
-            onChange={onChangeStartDate}
-          />
-        )}
-
-        {showEndDate && (
-          <DateTimePicker
-            testID="endDatePicker"
-            value={endDate}
-            mode="date"
-            display="default"
-            onChange={onChangeEndDate}
-          />
-        )}
-
-        <View style={styles.dateContainer}>
-          <View>
-            <Text style={styles.label}>Select Event Poster</Text>
-            <TouchableOpacity style={styles.calender} onPress={pickDocument}>
-              <Text style={styles.buttonText}>{imageName}</Text>
-            </TouchableOpacity>
-            {selectedImageUri && (
-          <Image
-            source={{ uri: selectedImageUri }}
-            style={{ width: '100%', height: 200, marginTop: 20 }}
-          />
-        )}
-          </View>
-
-          <View>
+        <View style={styles.cardContainer}>
+          <View style={styles.dateContainer}>
             <View>
-              <Text style={styles.label}>Enter Description</Text>
+              <Text style={styles.label}>Select Event Start Date</Text>
+              <TouchableOpacity
+                style={styles.calender}
+                onPress={showStartDatePicker}
+              >
+                <FontAwesome name="calendar" size={30} color="black" />
+
+                <Text style={styles.buttonText}>{formatDate(startDate)}</Text>
+              </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-              style={styles.calender}
-              onPress={() => {
-                SetIsModalVisible(true);
-              }}
-            >
-              <Text>Add a Description</Text>
-            </TouchableOpacity>
+            <View styles={{ marginLeft: 20 }}>
+              <Text style={styles.label}>Select Event End Date</Text>
+              <TouchableOpacity
+                style={styles.calender}
+                onPress={showEndDatePicker}
+              >
+                <FontAwesome name="calendar" size={30} color="black" />
+
+                <Text style={styles.buttonText}>{formatDate(endDate)}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
 
-        </View>
+          {showStartDate && (
+            <DateTimePicker
+              testID="startDatePicker"
+              value={startDate}
+              mode="date"
+              display="default"
+              onChange={onChangeStartDate}
+            />
+          )}
 
-       
-        <View style={styles.cardContainer}>
-        <Modal
-          visible={isModalVisible}
-          animationType="slide"
-          onRequestClose={() => {
-            SetIsModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Enter Description</Text>
-              <TouchableWithoutFeedback
+          {showEndDate && (
+            <DateTimePicker
+              testID="endDatePicker"
+              value={endDate}
+              mode="date"
+              display="default"
+              onChange={onChangeEndDate}
+            />
+          )}
+
+          <View style={styles.dateContainer}>
+            <View>
+              <Text style={styles.label}>Select Event Poster</Text>
+              <TouchableOpacity style={styles.calender} onPress={pickDocument}>
+                <Text style={styles.buttonText}>{imageName}</Text>
+              </TouchableOpacity>
+
+              <View style={{ margin: 10 }}>
+                {selectedImageUri && (
+                  <Image
+                    source={{ uri: selectedImageUri }}
+                    style={{
+                      resizeMode: "contain",
+                      aspectRatio: 1,
+                    }}
+                  />
+                )}
+              </View>
+            </View>
+
+            <View>
+              <View>
+                <Text style={styles.label}>Enter Event Description</Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.calender}
                 onPress={() => {
-                  SetIsModalVisible(false);
+                  SetIsModalVisible(true);
                 }}
               >
-                <FontAwesome5
-                  name="times"
-                  size={20}
-                  style={styles.modalClose}
-                />
-              </TouchableWithoutFeedback>
+                <Text>Add a Description</Text>
+              </TouchableOpacity>
             </View>
-
-            <View style={styles.modalContent}>
-              <RichEditor
-                ref={(ref) => (this.richTextEditor = ref)}
-                style={{ flex: 1 }}
-                initialContentHTML={content}
-                editorInitializedCallback={() => console.log("Editor is ready")}
-                onChange={onEditorChange}
-              />
-              <RichToolbar getEditor={() => this.richTextEditor} />
-            </View>
-          </View>
-        </Modal>
-
-        <View style={styles.skillsSection}>
-          <View style={styles.add_margin}>
-            <Text style={styles.sectionTitle}>Skills</Text>
-            <TouchableOpacity style={styles.update_about} onPress={openModal}>
-              <FontAwesome5 name="edit" size={16} />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.skillsContainer}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {selectedSkills.size > 0 ? (
-                Array.from(selectedSkills).map((skill, index) => (
-                  <SkillCard key={index} skill={skill} />
-                ))
-              ) : (
-                <Text style={styles.noSkillsMessage}>
-                  No Skills have been added
-                </Text>
-              )}
-            </ScrollView>
-            {selectedSkills.size !== 0 && (
-              <Text style={styles.more_text}>
-                Scroll <FontAwesome name="arrow-circle-right" size={16} /> for
-                more
-              </Text>
-            )}
           </View>
         </View>
-        {/* -------------------Skill Selection Modal-------------------- */}
 
-       
-        <Modal
-          transparent={true}
-          visible={SkillModalVisible}
-          animationType="slide"
-          onRequestClose={closeModal}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Edit Skills</Text>
-              <TouchableWithoutFeedback onPress={closeModal}>
-                <FontAwesome5
-                  name="times"
-                  size={20}
-                  style={styles.modalClose}
+        <View style={styles.cardContainer}>
+          <Text style={styles.label}>Select Skills</Text>
+          <Modal
+            visible={isModalVisible}
+            animationType="slide"
+            onRequestClose={() => {
+              SetIsModalVisible(false);
+            }}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Enter Description</Text>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    SetIsModalVisible(false);
+                  }}
+                >
+                  <FontAwesome5
+                    name="times"
+                    size={20}
+                    style={styles.modalClose}
+                  />
+                </TouchableWithoutFeedback>
+              </View>
+
+              <View style={styles.modalContent}>
+                <RichEditor
+                  ref={(ref) => (this.richTextEditor = ref)}
+                  style={{ flex: 1 }}
+                  placeholder="Start Typing....."
+                  initialContentHTML={content}
+                  editorInitializedCallback={() =>
+                    console.log("Editor is ready")
+                  }
+                  onChange={onEditorChange}
                 />
-              </TouchableWithoutFeedback>
+                <RichToolbar getEditor={() => this.richTextEditor} />
+              </View>
+            </View>
+          </Modal>
+
+          <View style={styles.skillsSection}>
+            <View style={styles.add_margin}>
+              <Text style={styles.sectionTitle}>Skills</Text>
+              <TouchableOpacity style={styles.update_about} onPress={openModal}>
+                <FontAwesome5 name="edit" size={16} />
+              </TouchableOpacity>
             </View>
 
-            <ScrollView style={styles.modalContent}>
-              <Text style={styles.modalDescription}>Select your skills:</Text>
-              <View style={styles.skillList}>
-                {skillsArray.map((skill) => (
-                  <TouchableOpacity
-                    key={skill}
-                    style={[
-                      styles.skillItem,
-                      {
-                        backgroundColor: selectedSkills.has(skill)
-                          ? "#1e3799"
-                          : "#fff",
-                        borderColor: selectedSkills.has(skill)
-                          ? "#fff"
-                          : "#1e3799",
-                      },
-                    ]}
-                    onPress={() => toggleSkill(skill)}
-                  >
-                    <Text
-                      style={{
-                        color: selectedSkills.has(skill) ? "#fff" : "#1e3799",
-                      }}
-                    >
-                      {skill}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
+            <View style={styles.skillsContainer}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {selectedSkills.size > 0 ? (
+                  Array.from(selectedSkills).map((skill, index) => (
+                    <SkillCard key={index} skill={skill} />
+                  ))
+                ) : (
+                  <Text style={styles.noSkillsMessage}>
+                    No Skills have been added
+                  </Text>
+                )}
+              </ScrollView>
+              {selectedSkills.size !== 0 && (
+                <Text style={styles.more_text}>
+                  Scroll <FontAwesome name="arrow-circle-right" size={16} /> for
+                  more
+                </Text>
+              )}
+            </View>
           </View>
-        </Modal>
+          {/* -------------------Skill Selection Modal-------------------- */}
+
+          <Modal
+            transparent={true}
+            visible={SkillModalVisible}
+            animationType="slide"
+            onRequestClose={closeModal}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Edit Skills</Text>
+                <TouchableWithoutFeedback onPress={closeModal}>
+                  <FontAwesome5
+                    name="times"
+                    size={20}
+                    style={styles.modalClose}
+                  />
+                </TouchableWithoutFeedback>
+              </View>
+
+              <ScrollView style={styles.modalContent}>
+                <Text style={styles.modalDescription}>Select your skills:</Text>
+                <View style={styles.skillList}>
+                  {skillsArray.map((skill) => (
+                    <TouchableOpacity
+                      key={skill}
+                      style={[
+                        styles.skillItem,
+                        {
+                          backgroundColor: selectedSkills.has(skill)
+                            ? "#1e3799"
+                            : "#fff",
+                          borderColor: selectedSkills.has(skill)
+                            ? "#fff"
+                            : "#1e3799",
+                        },
+                      ]}
+                      onPress={() => toggleSkill(skill)}
+                    >
+                      <Text
+                        style={{
+                          color: selectedSkills.has(skill) ? "#fff" : "#1e3799",
+                        }}
+                      >
+                        {skill}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
+            </View>
+          </Modal>
         </View>
 
         {/* -------------------------Interests Section--------------------- */}
         <View style={styles.cardContainer}>
-        <View style={styles.skillsSection}>
-          <View style={styles.add_margin}>
-            <Text style={styles.sectionTitle}>Interests</Text>
-            <TouchableOpacity
-              style={styles.update_about}
-              onPress={openShowInterestModal}
-            >
-              <FontAwesome5 name="edit" size={16} />
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.label}>Select Interest</Text>
+          <View style={styles.skillsSection}>
+            <View style={styles.add_margin}>
+              <Text style={styles.sectionTitle}>Interests</Text>
+              <TouchableOpacity
+                style={styles.update_about}
+                onPress={openShowInterestModal}
+              >
+                <FontAwesome5 name="edit" size={16} />
+              </TouchableOpacity>
+            </View>
 
-          <View style={styles.skillsContainer}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {selectedInterests.size > 0 ? (
-                Array.from(selectedInterests).map((interest, index) => (
-                  <SkillCard key={index} skill={interest} color={"lightblue"} />
-                ))
-              ) : (
-                <Text style={styles.noSkillsMessage}>
-                  No Interests have been added
+            <View style={styles.skillsContainer}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {selectedInterests.size > 0 ? (
+                  Array.from(selectedInterests).map((interest, index) => (
+                    <SkillCard
+                      key={index}
+                      skill={interest}
+                      color={"lightblue"}
+                    />
+                  ))
+                ) : (
+                  <Text style={styles.noSkillsMessage}>
+                    No Interests have been added
+                  </Text>
+                )}
+              </ScrollView>
+              {selectedInterests.size !== 0 && (
+                <Text style={styles.more_text}>
+                  Scroll <FontAwesome name="arrow-circle-right" size={16} /> for
+                  more
                 </Text>
               )}
-            </ScrollView>
-            {selectedInterests.size !== 0 && (
-              <Text style={styles.more_text}>
-                Scroll <FontAwesome name="arrow-circle-right" size={16} /> for
-                more
-              </Text>
-            )}
+            </View>
           </View>
-        </View>
         </View>
         {/* -------------------------Interest Selection Modal------------------------- */}
         <Modal
@@ -456,7 +470,18 @@ function InputForm() {
           </View>
         </Modal>
 
-      
+        <TouchableOpacity
+          style={styles.next}
+          onPress={() => {
+            console.log("Pressed next");
+            // <Stack.Navigator>
+            //   <Stack.Screen name="Awards" component={Awards} />
+            // </Stack.Navigator>
+            navigation.navigate("Awards")
+          }}
+        >
+          <AntDesign name="arrowright" size={24} color="black" />
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -476,10 +501,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: '100%',
-    backgroundColor: '#E6E6E6',
+    width: "100%",
+    backgroundColor: "#E6E6E6",
     borderWidth: 1,
-    borderColor: '#BDBDBD',
+    borderColor: "#BDBDBD",
     padding: 10,
     borderRadius: 10,
   },
@@ -489,18 +514,18 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   calender: {
-    backgroundColor: '#E6E6E6',
+    backgroundColor: "#E6E6E6",
     alignItems: "center",
     padding: 15,
     borderRadius: 15,
-    width: '100%',
+    width: "100%",
     height: 60,
     flexDirection: "row",
     borderColor: "#D3D3D3",
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
   },
   dateContainer: {
-    justifyContent:'space-between',
+    justifyContent: "space-between",
   },
 
   modalContainer: {
@@ -534,7 +559,6 @@ const styles = StyleSheet.create({
   skillsSection: {
     margin: 4,
     padding: 25,
-   
   },
 
   sectionTitle: {
@@ -591,18 +615,29 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cardContainer: {
-    backgroundColor: 'white', // Background color of the card
+    backgroundColor: "white", // Background color of the card
     borderRadius: 10, // Rounded corners for the card
     padding: 20, // Spacing inside the card
     elevation: 3, // Controls the shadow depth
-    shadowColor: 'black', // Color of the shadow
+    shadowColor: "black", // Color of the shadow
     shadowOffset: { width: 0, height: 2 }, // Shadow offset
     shadowOpacity: 0.2, // Shadow opacity
     shadowRadius: 4, // Shadow blur radius
-    width:340,
-    marginBottom:10,
+    width: 340,
+    marginBottom: 10,
   },
-  
+  next: {
+    backgroundColor: "#E6E6E6",
+    alignSelf: "flex-end",
+    padding: 15,
+    borderRadius: 15,
+    width: 100,
+    height: 60,
+    marginRight: 32,
+    flexDirection: "row",
+    borderColor: "#D3D3D3",
+    justifyContent: "space-around",
+  },
 });
 
 export default InputForm;

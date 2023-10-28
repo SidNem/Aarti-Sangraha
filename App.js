@@ -23,6 +23,7 @@ import {
 } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import Awards from "./screens/Awards";
 
 const Tab = createBottomTabNavigator();
 
@@ -98,8 +99,8 @@ export default function App() {
           }}
         ></Tab.Screen>
         <Tab.Screen
-          name="Settings"
-          component={Settings}
+          name="Awards"
+          component={Awards}
           options={{
             tabBarIcon: ({ focused }) => {
               return (
