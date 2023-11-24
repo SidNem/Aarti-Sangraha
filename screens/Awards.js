@@ -40,7 +40,7 @@ function Awards() {
 
   const [descName, setDescName] = useState("");
 
-  const [badgeDetails, setBadgeDetails] = useState([]); 
+  const [badgeDetails, setBadgeDetails] = useState([]);
 
   const [clickedBadges, setClickedBadges] = useState(
     new Array(imageURIs.length).fill(false)
@@ -51,25 +51,24 @@ function Awards() {
   const toggleModal = (index, image) => {
     setSelectedBadgeIndex(index);
 
-  // Check if badge information is already stored
+    // Check if badge information is already stored
 
-  BadgeObject.img = image;
-  setSelectedBadgeImg(image);
-  BadgeObject.img = image;
-  console.log(BadgeObject.img);
-  setIsModalVisible(true);
-};
+    BadgeObject.img = image;
+    setSelectedBadgeImg(image);
+    BadgeObject.img = image;
+    console.log(BadgeObject.img);
+    setIsModalVisible(true);
+  };
 
   const handleSelectOption = (option) => {
     setSelectedOption(option);
   };
 
-
-  const handleSave = (name,desc,weight) => {
-    console.log(name,weight,desc);
+  const handleSave = (name, desc, weight) => {
+    console.log(name, weight, desc);
     if (badgeName && descName && selectedOption) {
       // Create a new badge object with the entered information
-     
+
       BadgeObject.Name = name;
       BadgeObject.Desc = desc;
       BadgeObject.Weight = weight;
@@ -77,12 +76,10 @@ function Awards() {
       badgeInfo.push(BadgeObject);
 
       console.log(badgeInfo);
-      
 
       const updatedClickedBadges = [...clickedBadges];
       updatedClickedBadges[selectedBadgeIndex] = true;
       setClickedBadges(updatedClickedBadges);
-
 
       setBadgeName("");
       setDescName("");
@@ -90,23 +87,20 @@ function Awards() {
 
       // Close the modal
       setIsModalVisible(false);
-
-
     }
   };
 
-  const handleDiscard= () => {
+  const handleDiscard = () => {
     setBadgeName("");
-      setDescName("");
-      setSelectedOption(null);
+    setDescName("");
+    setSelectedOption(null);
 
-      
-      const updatedClickedBadges = [...clickedBadges];
-      updatedClickedBadges[selectedBadgeIndex] = false;
-      setClickedBadges(updatedClickedBadges);
+    const updatedClickedBadges = [...clickedBadges];
+    updatedClickedBadges[selectedBadgeIndex] = false;
+    setClickedBadges(updatedClickedBadges);
 
-      // Close the modal
-      setIsModalVisible(false);
+    // Close the modal
+    setIsModalVisible(false);
   };
 
   return (
@@ -156,9 +150,7 @@ function Awards() {
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Enter Badge Information</Text>
-              <TouchableWithoutFeedback
-                onPress={handleDiscard}
-              >
+              <TouchableWithoutFeedback onPress={handleDiscard}>
                 <FontAwesome5
                   name="times"
                   size={20}
@@ -205,25 +197,34 @@ function Awards() {
                   <TouchableOpacity
                     style={[
                       styles.next,
-                      selectedOption === '10' ? styles.selectedRadioButton : null,
+                      selectedOption === "10"
+                        ? styles.selectedRadioButton
+                        : null,
                     ]}
-                    onPress={() => handleSelectOption('10')}>
+                    onPress={() => handleSelectOption("10")}
+                  >
                     <Text>10</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                   style={[
-                    styles.next,
-                    selectedOption === '20' ? styles.selectedRadioButton : null,
-                  ]}
-                  onPress={() => handleSelectOption('20')}>
+                    style={[
+                      styles.next,
+                      selectedOption === "20"
+                        ? styles.selectedRadioButton
+                        : null,
+                    ]}
+                    onPress={() => handleSelectOption("20")}
+                  >
                     <Text>20</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                     style={[
+                    style={[
                       styles.next,
-                      selectedOption === '30' ? styles.selectedRadioButton : null,
+                      selectedOption === "30"
+                        ? styles.selectedRadioButton
+                        : null,
                     ]}
-                    onPress={() => handleSelectOption('30')}>
+                    onPress={() => handleSelectOption("30")}
+                  >
                     <Text>30</Text>
                   </TouchableOpacity>
                 </View>
@@ -236,10 +237,18 @@ function Awards() {
                   marginTop: 60,
                 }}
               >
-                <TouchableOpacity style={styles.save}  onPress={() => {handleSave(badgeName,descName,selectedOption)}}>
+                <TouchableOpacity
+                  style={styles.save}
+                  onPress={() => {
+                    handleSave(badgeName, descName, selectedOption);
+                  }}
+                >
                   <Text>Save</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.discard} onPress={handleDiscard}>
+                <TouchableOpacity
+                  style={styles.discard}
+                  onPress={handleDiscard}
+                >
                   <Text>Discard</Text>
                 </TouchableOpacity>
               </View>
@@ -366,7 +375,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   selectedRadioButton: {
-    backgroundColor: 'green', // Change the color when selected
+    backgroundColor: "green", // Change the color when selected
   },
 });
 
