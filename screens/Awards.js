@@ -13,50 +13,108 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "react-native-vector-icons";
 function Awards() {
-  const imageURIs = [
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
-    // Add more image URIs as needed
-  ];
-
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [blurredBadgeIds, setBlurredBadgeIds] = useState(new Set());
 
-  const BadgeObject = { img: null, Weight: null, Name: null, Desc: null };
-
-  const [selectedBadgeImg, setSelectedBadgeImg] = useState(null);
-
-  const [selectedBadgeIndex, setSelectedBadgeIndex] = useState(null);
-
-  const badgeInfo = [{}];
+  const [activeBadges, setActiveBadges] = useState([]);
 
   const [badgeName, setBadgeName] = useState("");
-
   const [descName, setDescName] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+  const [currentActiveBadge, setCurrentActiveBadge] = useState({
+    badgeId: "",
+    imageURL: "",
+    name: "",
+    description: "",
+    weight: null,
+  });
 
-  const [badgeDetails, setBadgeDetails] = useState([]);
+  const badges = [
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 1,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 2,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 3,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1V9eK0u-ZyHDNjEaVJXeC7QZ9Mf2eiEUB",
+      badgeId: 4,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 5,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 6,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 7,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 8,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 9,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 10,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 11,
+      clicked: false,
+    },
+    {
+      imageURL:
+        "https://drive.google.com/uc?export=view&id=1bnL_DIgmSAVyLKOX9jTB7RFSNEPHywwo",
+      badgeId: 12,
+      clicked: false,
+    },
+  ];
 
-  const [clickedBadges, setClickedBadges] = useState(
-    new Array(imageURIs.length).fill(false)
-  );
+  const toggleModal = (badge) => {
+    setBadgeName("");
+    setDescName("");
+    setSelectedOption("");
 
-  const [selectedOption, setSelectedOption] = useState(null);
+    console.log(currentActiveBadge);
+    setCurrentActiveBadge(badge);
+    console.log("\n\nBadges\n\n");
+    console.log(badge);
 
-  const toggleModal = (index, image) => {
-    setSelectedBadgeIndex(index);
-
-    // Check if badge information is already stored
-
-    BadgeObject.img = image;
-    setSelectedBadgeImg(image);
-    BadgeObject.img = image;
-    console.log(BadgeObject.img);
+    loadBadgeInfo(badge.badgeId);
     setIsModalVisible(true);
   };
 
@@ -64,88 +122,145 @@ function Awards() {
     setSelectedOption(option);
   };
 
-  const handleSave = (name, desc, weight) => {
-    console.log(name, weight, desc);
-    if (badgeName && descName && selectedOption) {
-      // Create a new badge object with the entered information
+  const updateCurrentActiveBadge = (newValues) => {
+    setCurrentActiveBadge((prev) => ({ ...prev, ...newValues }));
+  };
 
-      BadgeObject.Name = name;
-      BadgeObject.Desc = desc;
-      BadgeObject.Weight = weight;
+  const handleSave = (badgeName, descName, selectedOption) => {
+    console.log("Current: ");
+    console.log(currentActiveBadge);
 
-      badgeInfo.push(BadgeObject);
+    setCurrentActiveBadge({
+      name: badgeName,
+      description: descName,
+      weight: selectedOption.toString(),
+    });
 
-      console.log(badgeInfo);
+    const updatedBadge = {
+      name: badgeName,
+      description: descName,
+      weight: selectedOption.toString(),
+    };
 
-      const updatedClickedBadges = [...clickedBadges];
-      updatedClickedBadges[selectedBadgeIndex] = true;
-      setClickedBadges(updatedClickedBadges);
+    const badgeIndex = activeBadges.findIndex(
+      (badge) => badge.badgeId === currentActiveBadge.badgeId
+    );
 
-      setBadgeName("");
-      setDescName("");
-      setSelectedOption(null);
-
-      // Close the modal
-      setIsModalVisible(false);
+    if (badgeIndex !== -1) {
+      // If badge exists, update its properties
+      setActiveBadges((prevActiveBadges) => {
+        const updatedBadges = [...prevActiveBadges];
+        updatedBadges[badgeIndex] = {
+          ...updatedBadges[badgeIndex],
+          ...updatedBadge,
+        };
+        return updatedBadges;
+      });
+    } else {
+      // If badge does not exist, add it to the active badges
+      setActiveBadges((prevActiveBadges) => [
+        ...prevActiveBadges,
+        {
+          badgeId: currentActiveBadge.badgeId,
+          imageURL: currentActiveBadge.imageURL,
+          name: badgeName,
+          description: descName,
+          weight: selectedOption.toString(),
+        },
+      ]);
     }
+
+    setBadgeName("");
+    setDescName("");
+    setSelectedOption("");
+
+    // setActiveBadges((prevActiveBadges) => [
+    //   ...prevActiveBadges,
+    //   {
+    //     badgeId: currentActiveBadge.badgeId,
+    //     imageURL: currentActiveBadge.imageURL,
+    //     name: badgeName,
+    //     description: descName,
+    //     weight: selectedOption.toString(),
+    //   },
+    // ]);
+
+    console.log("\n\nCurrent Active Badgge\n\n");
+
+    console.log(currentActiveBadge);
+
+    console.log("\nActive Badges\n", activeBadges);
+
+    setBlurredBadgeIds(
+      (prevSet) => new Set([...prevSet, currentActiveBadge.badgeId])
+    );
+
+    setIsModalVisible(false);
+
+    // Do whatever you want to do with the saved badge data
   };
 
   const handleDiscard = () => {
-    setBadgeName("");
-    setDescName("");
-    setSelectedOption(null);
 
-    const updatedClickedBadges = [...clickedBadges];
-    updatedClickedBadges[selectedBadgeIndex] = false;
-    setClickedBadges(updatedClickedBadges);
+    setActiveBadges((prevActiveBadges) =>
+      prevActiveBadges.filter(
+        (badge) => badge.badgeId !== currentActiveBadge.badgeId
+      )
+    );
 
-    // Close the modal
+
+      // Remove the badge ID from blurredBadgeIds set
+      setBlurredBadgeIds((prevSet) => {
+        const newSet = new Set(prevSet);
+        newSet.delete(currentActiveBadge.badgeId);
+        return newSet;
+      });
+
+      
     setIsModalVisible(false);
+    
   };
 
+  const loadBadgeInfo = (badgeId) => {
+    const badgeInfo = activeBadges.find((badge) => badge.badgeId === badgeId);
+    if (badgeInfo) {
+      setBadgeName(badgeInfo.name);
+      setDescName(badgeInfo.description);
+      setSelectedOption(badgeInfo.weight);
+    }
+  };
+
+  const renderBadgeItem = ({ item, index }) => (
+    <TouchableOpacity onPress={() => toggleModal(item)}>
+      <View style={styles.imageCard}>
+        <Image
+          source={{ uri: item.imageURL }}
+          style={[
+            styles.circularImage,
+            blurredBadgeIds.has(item.badgeId) ? { opacity: 0.5 } : null,
+          ]}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       <SafeAreaView>
         <View style={styles.cardContainer}>
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <FlatList
-              data={imageURIs}
-              numColumns={2}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => (
-                <TouchableOpacity onPress={() => toggleModal(index, item)}>
-                  <View style={styles.imageCard}>
-                    <Image
-                      source={{ uri: item }}
-                      style={[
-                        styles.circularImage,
-                        clickedBadges[index] === true ? { opacity: 0.5 } : null,
-                      ]}
-                    />
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
+          <FlatList
+            data={badges}
+            numColumns={2}
+            keyExtractor={(item) => item.badgeId.toString()}
+            renderItem={renderBadgeItem}
+          />
         </View>
 
         <Modal
           transparent={true}
           visible={isModalVisible}
           animationType="slide"
-          onRequestClose={() => {
-            setIsModalVisible(false);
-            for (const key in BadgeObject) {
-              BadgeObject[key] = null;
-            }
-          }}
+          onRequestClose={() => setIsModalVisible(false)}
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
@@ -160,12 +275,51 @@ function Awards() {
             </View>
 
             <ScrollView style={styles.modalContent}>
-              <View style={{ alignItems: "center" }}>
+              <View style={styles.badgeImageContainer}>
                 <Image
-                  source={{ uri: selectedBadgeImg }}
+                  source={{ uri: currentActiveBadge.imageURL }}
                   style={styles.circularImage}
                 />
               </View>
+
+              {/* <View>
+                <Text style={styles.label}>Enter For what Badge Is</Text>
+                <TextInput
+                  style={styles.inputField}
+                  placeholder="Enter Badge Name"
+                  value={badgeName}
+                  onChangeText={setBadgeName}
+                />
+                <Text style={styles.label}>Enter the Description of Badge</Text>
+                <TextInput
+                  style={styles.descField}
+                  placeholder="Enter Badge Description"
+                  value={descName}
+                  onChangeText={setDescName}
+                  multiline={true}
+                  numberOfLines={4}
+                />
+              </View>  */}
+
+              {/* <View>
+                <Text style={styles.label}>Select Weight For the Badge</Text>
+                <View style={styles.radioButtonContainer}>
+                  {[10, 20, 30].map((option) => (
+                    <TouchableOpacity
+                      key={option}
+                      style={[
+                        styles.next,
+                        selectedOption === option
+                          ? styles.selectedRadioButton
+                          : null,
+                      ]}
+                      onPress={() => handleSelectOption(option)}
+                    >
+                      <Text style={styles.buttonText}>{option}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View> */}
 
               <View>
                 <Text style={styles.label}>Enter For what Badge Is</Text>
@@ -188,68 +342,38 @@ function Awards() {
 
               <View>
                 <Text style={styles.label}>Select Weight For the Badge</Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  <TouchableOpacity
-                    style={[
-                      styles.next,
-                      selectedOption === "10"
-                        ? styles.selectedRadioButton
-                        : null,
-                    ]}
-                    onPress={() => handleSelectOption("10")}
-                  >
-                    <Text>10</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.next,
-                      selectedOption === "20"
-                        ? styles.selectedRadioButton
-                        : null,
-                    ]}
-                    onPress={() => handleSelectOption("20")}
-                  >
-                    <Text>20</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.next,
-                      selectedOption === "30"
-                        ? styles.selectedRadioButton
-                        : null,
-                    ]}
-                    onPress={() => handleSelectOption("30")}
-                  >
-                    <Text>30</Text>
-                  </TouchableOpacity>
+                <View style={styles.radioButtonContainer}>
+                  {["10", "20", "30"].map((option) => (
+                    <TouchableOpacity
+                      key={option}
+                      style={[
+                        styles.next,
+                        selectedOption === option
+                          ? styles.selectedRadioButton
+                          : null,
+                      ]}
+                      onPress={() => handleSelectOption(option)}
+                    >
+                      <Text style={styles.buttonText}>{option}</Text>
+                    </TouchableOpacity>
+                  ))}
                 </View>
               </View>
 
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  marginTop: 60,
-                }}
-              >
+              <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.save}
-                  onPress={() => {
-                    handleSave(badgeName, descName, selectedOption);
-                  }}
+                  onPress={() =>
+                    handleSave(badgeName, descName, selectedOption)
+                  }
                 >
-                  <Text>Save</Text>
+                  <Text style={styles.buttonText}>Save</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.discard}
                   onPress={handleDiscard}
                 >
-                  <Text>Discard</Text>
+                  <Text style={styles.buttonText}>Discard</Text>
                 </TouchableOpacity>
               </View>
             </ScrollView>
@@ -261,10 +385,21 @@ function Awards() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  cardContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   circularImage: {
-    width: 150, // Adjust the size as needed
-    height: 150, // Adjust the size as needed
-    borderRadius: 75, // Half of width and height to create a circle
+    width: 150,
+    height: 150,
+    borderRadius: 75,
     marginTop: 27,
     marginHorizontal: 12,
     marginBottom: 27,
@@ -273,14 +408,14 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backgroundColor: "#fff",
     justifyContent: "flex-end",
   },
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
-    backgroundColor: "#1e3799",
+    backgroundColor: "#5c9af8",
   },
   modalTitle: {
     fontSize: 20,
@@ -298,29 +433,24 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
   },
-  modalDescription: {
-    fontSize: 16,
-    color: "#333",
-    marginBottom: 10,
+  badgeImageContainer: {
+    alignItems: "center",
   },
   imageCard: {
-    backgroundColor: "blue", // White background color for the card
-    borderRadius: 5, // Rounded corners for the card
-    elevation: 3, // Controls the shadow depth
-    shadowColor: "black", // Color of the shadow
-    shadowOffset: { width: 0, height: 2 }, // Shadow offset
-    shadowOpacity: 0.2, // Shadow opacity
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    elevation: 3,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
     shadowRadius: 4,
     margin: 3,
-
-    // Adjust the margin as needed
   },
   label: {
     fontSize: 14,
     marginBottom: 5,
     marginTop: 5,
   },
-
   inputField: {
     height: 40,
     width: "100%",
@@ -332,7 +462,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-
   descField: {
     height: 50,
     width: "100%",
@@ -343,6 +472,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     marginBottom: 10,
+  },
+  radioButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   next: {
     backgroundColor: "#E6E6E6",
@@ -355,27 +488,36 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   save: {
-    backgroundColor: "green",
+    backgroundColor: "#5c9af8",
     padding: 15,
     borderRadius: 10,
     width: 100,
     height: 50,
-    borderColor: "#D3D3D3",
+    borderColor: "#2980b9",
     alignItems: "center",
     marginTop: 10,
   },
   discard: {
-    backgroundColor: "red",
+    backgroundColor: "#e74c3c",
     padding: 15,
     borderRadius: 10,
     width: 100,
     height: 50,
-    borderColor: "#D3D3D3",
+    borderColor: "#c0392b",
     alignItems: "center",
     marginTop: 10,
   },
   selectedRadioButton: {
-    backgroundColor: "green", // Change the color when selected
+    backgroundColor: "#5c9af8",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 60,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 
