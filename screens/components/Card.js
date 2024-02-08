@@ -10,7 +10,7 @@ import { React, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-function formatDate(inputDate, flag) {
+function formatDate() {
   const months = [
     "Jan",
     "Feb",
