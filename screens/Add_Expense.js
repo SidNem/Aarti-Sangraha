@@ -7,20 +7,24 @@ import {
   TouchableWithoutFeedback,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 import { FontAwesome5 } from "react-native-vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+
+import { Ionicons } from "@expo/vector-icons";
 
 const Add_Expense = () => {
-
   const navigation = useNavigation();
   const [expense, setExpense] = useState("");
   const [productName, setProductName] = useState("");
@@ -32,6 +36,67 @@ const Add_Expense = () => {
 
   const [productNameError, setProductNameError] = useState("");
   const [expenseError, setExpenseError] = useState("");
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [textSelectCategory,setTextSelectCategory] = useState("Select Category");
+
+  const categories = [
+    {
+      name: "Food & Dining",
+      icon: <Ionicons name="fast-food" size={24} color="black" />,
+    },
+    {
+      name: "Groceries",
+      icon: <FontAwesome5 name="shopping-cart" size={24} color="black" />,
+    },
+    {
+      name: "Transportation",
+      icon: (
+        <MaterialIcons name="emoji-transportation" size={24} color="black" />
+      ),
+    },
+    {
+      name: "Housing",
+      icon: <FontAwesome5 name="house-damage" size={24} color="black" />,
+    },
+    {
+      name: "Health & Medical",
+      icon: (
+        <MaterialCommunityIcons
+          name="hospital-box-outline"
+          size={24}
+          color="black"
+        />
+      ),
+    },
+    {
+      name: "Clothing & Accessories",
+      icon: <FontAwesome5 name="tshirt" size={24} color="black" />,
+    },
+    {
+      name: "Education",
+      icon: (
+        <MaterialCommunityIcons name="book-education" size={24} color="black" />
+      ),
+    },
+    {
+      name: "Gifts & Donations",
+      icon: <FontAwesome5 name="gift" size={24} color="black" />,
+    },
+    {
+      name: "Travel",
+      icon: <MaterialIcons name="explore" size={24} color="black" />,
+    },
+    {
+      name: "Miscellaneous",
+      icon: (
+        <MaterialIcons name="miscellaneous-services" size={24} color="black" />
+      ),
+    },
+  ];
 
   const showStartDatePicker = () => {
     setShowPurchaseDate(true);
@@ -51,13 +116,14 @@ const Add_Expense = () => {
   };
   const saveExpense = async () => {
     // Check if expense is greater than balance
-    const existingBalance = parseFloat(await AsyncStorage.getItem('balance')) || 0;
+    const existingBalance =
+      parseFloat(await AsyncStorage.getItem("balance")) || 0;
     const expenseAmount = parseFloat(expense);
     if (expenseAmount > existingBalance) {
       alert("Expense cannot exceed available balance");
       return;
     }
-  
+
     if (!productName.trim()) {
       setProductNameError("Please enter product name");
       alert("Please Enter Product Name");
@@ -72,18 +138,18 @@ const Add_Expense = () => {
     } else {
       setExpenseError("");
     }
-  
+
     // Constructing the expense object
     const newExpense = {
       productName: productName,
       expense: expense,
       purchaseDate: PurchaseDate,
     };
-  
+
     // Saving the expense object
     try {
       // Get existing expenses from AsyncStorage
-      const existingExpenses = await AsyncStorage.getItem('expenses');
+      const existingExpenses = await AsyncStorage.getItem("expenses");
       let expensesArray = [];
       if (existingExpenses !== null) {
         // Parse existing expenses if they exist
@@ -92,26 +158,44 @@ const Add_Expense = () => {
       // Add the new expense to the array
       expensesArray.unshift(newExpense);
       // Store the updated array back to AsyncStorage
-      await AsyncStorage.setItem('expenses', JSON.stringify(expensesArray));
+      await AsyncStorage.setItem("expenses", JSON.stringify(expensesArray));
       // Update the state with the new expenses
       setSavedExpenses(expensesArray);
-  
+
       // Update balance
       const updatedBalance = existingBalance - expenseAmount;
       console.log(updatedBalance);
-      await AsyncStorage.setItem('balance', updatedBalance.toString());
+      await AsyncStorage.setItem("balance", updatedBalance.toString());
     } catch (error) {
-      console.error('Error saving expense:', error);
+      console.error("Error saving expense:", error);
     }
-  
+
     // Clearing fields
     setProductName("");
     setExpense("");
     setPurchaseDate(new Date());
-  
-    navigation.navigate('Home');
+
+    navigation.navigate("Home");
   };
-  
+
+  const renderItem = ({ item }) => (
+    <View style={styles.cardContainer}>
+      <View style={styles.cardFlat}>
+        <TouchableOpacity
+          style={styles.categoryItem}
+          onPress={() => {
+            setSelectedCategory(item.icon);
+            setTextSelectCategory(item.name);
+            console.log(item.name);
+            setIsModalVisible(false);
+          }}
+        >
+          <Text style={styles.categoryName}>{item.name}</Text>
+          {item.icon}
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.card}>
@@ -137,6 +221,24 @@ const Add_Expense = () => {
         <TouchableOpacity style={styles.calender} onPress={showStartDatePicker}>
           <FontAwesome name="calendar" size={25} color="black" />
           <Text style={styles.buttonText}>{formatDate(PurchaseDate)}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            setIsModalVisible(true);
+            setTextSelectCategory(`${selectedCategory}`);
+          }}
+          style={{
+            height: 40,
+            borderWidth: 1,
+            borderRadius: 10,
+            padding: 10,
+            marginTop: 20,
+            borderColor: "#BDBDBD",
+            backgroundColor: "#E6E6E6",
+          }}
+        >
+          <Text>{textSelectCategory}</Text>
         </TouchableOpacity>
 
         {showPurchaseDate && (
@@ -165,6 +267,39 @@ const Add_Expense = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <Modal
+        transparent={true}
+        visible={isModalVisible}
+        animationType="fade"
+        onRequestClose={() =>{ setTextSelectCategory("Select Category"); setIsModalVisible(false);}
+           } >
+        <View style={styles.modalContainer}>
+          <LinearGradient
+            colors={["#FF69B4", "#8A2BE2"]}
+            style={styles.modalHeaderGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Categories</Text>
+              <TouchableWithoutFeedback
+                onPress={() => setIsModalVisible(false)}
+              >
+                <FontAwesome5
+                  name="times"
+                  style={[styles.modalClose, { fontSize: 24 }]}
+                />
+              </TouchableWithoutFeedback>
+            </View>
+          </LinearGradient>
+          <FlatList
+            data={categories}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.name}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -280,6 +415,58 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: "flex-start", // Change to 'flex-start' to position the content at the top
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+  },
+  modalHeaderGradient: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  modalTitle: {
+    fontSize: 20,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  modalClose: {
+    color: "#fff",
+    marginRight: 15,
+  },
+  cardContainer: {
+    marginHorizontal: 20,
+    marginTop: 10,
+  },
+  cardFlat: {
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    padding: 20,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    width: "100%", // Adjust the width as needed
+    marginBottom: 10,
+    flexDirection: "row",
+  },
+
+  categoryItem: {
+    flexDirection: "row",
+    flex:1,
+    justifyContent: "space-between",
+    padding: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  categoryName: {
+    fontSize: 18,
   },
 });
 export default Add_Expense;
